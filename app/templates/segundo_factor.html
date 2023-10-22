@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>Bio-Login</title>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/biologia.png') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    </head>
+    <body>
+
+        {% if msg %}
+            <p class="{{ msg_class }}" id="msg_login">{{ msg }}</p>
+        {% endif %}
+
+        <script>
+            var parrafo = document.getElementById("msg_login")
+            var principal = "/principal"
+
+            setTimeout(function(){
+                parrafo.style.display = "none";
+                window.location.href = principal;
+            }, 3000);
+        </script>
+        
+        <img src="{{ url_for('static', filename='images/adn.png') }}" id="adn">
+        <div class="panel-principal" id="panel-2fa">
+            <h1>Codigo de verificacion</h1>
+            <p>Introduzca a continuacion el codigo de verificación<br>enviado al email asociado a su cuenta de BioLab</p>
+            <form class="login" action="/form-2fa" method="post">
+                <input type="text" placeholder="Codigo Verificacion" autofocus required name="codigo" class="campo"><br>
+                <input type="submit" class="campo" id="enviar">
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,20 +1,22 @@
 CREATE TABLE usuarios(
-    dni CHAR(9) PRIMARY KEY NOT NULL,
-    nombre VARCHAR(30) NOT NULL,
-    apellidos VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL,
-    telefono CHAR(9) NOT NULL,
+    user_name VARCHAR(255) PRIMARY KEY NOT NULL,
+    dni BLOB NOT NULL,
+    nombre BLOB NOT NULL,
+    apellidos BLOB NOT NULL,
+    email BLOB NOT NULL,
+    telefono BLOB NOT NULL,
     salt BLOB NOT NULL,
-    encryped_pass BLOB NOT NULL
+    encryped_pass BLOB NOT NULL,
+    permiso CHAR(1) NOT NULL
 );
 
 
 CREATE TABLE papers(
-    dni CHAR(9) NOT NULL,
+    user_name VARCHAR(255) NOT NULL,
     titulo VARCHAR(150) NOT NULL,
     cuerpo BLOB NOT NULL,
     salt BLOB NOT NULL,
     nonce BLOB NOT NULL,
-    PRIMARY KEY (dni,titulo),
-    FOREIGN KEY (dni) REFERENCES usuarios(dni)
+    PRIMARY KEY (user_name, titulo),
+    FOREIGN KEY (user_name) REFERENCES usuarios(user_name)
 );

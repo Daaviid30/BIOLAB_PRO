@@ -1,6 +1,6 @@
-import mysql.connector
 import os
 import conexion_db
+from cifrado_simetrico import encriptar_dato
 from inicio_sesion import pasar_password, pasar_identificador
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 # Guardamos el paper introducido, cifrandolo en el proceso
 def guardar_paper(titulo, cuerpo):
-    # Obtenemos los valores de contraseña y DNI para  insertar el paper en el usuario que corresponde
+    # Obtenemos los valores de contraseña y nombre de usuario para  insertar el paper en el usuario que corresponde
     password_key, identificador = pasar_password(), pasar_identificador()
     # Encriptamos con un MAC la contraseña en claro para crear una clave de encriptación
     salt = os.urandom(16)
@@ -31,7 +31,7 @@ def guardar_paper(titulo, cuerpo):
 
     # Introducimos en la base de datos los datos del paper que necesitamos conservar
     try:
-        insertar_datos = "INSERT INTO papers (dni, titulo, cuerpo, salt, nonce) VALUES (%s, %s, %s, %s, %s)"
+        insertar_datos = "INSERT INTO papers (user_name, titulo, cuerpo, salt, nonce) VALUES (%s, %s, %s, %s, %s)"
         values = (identificador, titulo, encrypted_data, salt, nonce)
         conexion_db.cursor.execute(insertar_datos, values)
         conexion_db.conexion.commit()
@@ -46,7 +46,7 @@ def guardar_paper(titulo, cuerpo):
 # de un usuario
 def listar_papers():
     identificador = pasar_identificador()
-    consulta = "SELECT titulo FROM papers WHERE dni = %s"
+    consulta = "SELECT titulo FROM papers WHERE user_name = %s"
     values = (identificador,)
     conexion_db.cursor.execute(consulta, values)
     resultados = conexion_db.cursor.fetchall()
@@ -59,7 +59,7 @@ def recuperar_cuerpo(titulo):
     password = pasar_password()
 
     try:
-        consulta = "SELECT cuerpo, salt, nonce FROM papers WHERE dni = %s AND titulo = %s"
+        consulta = "SELECT cuerpo, salt, nonce FROM papers WHERE user_name = %s AND titulo = %s"
         values = (identificador, titulo)
         conexion_db.cursor.execute(consulta, values)
         resultados = conexion_db.cursor.fetchall()

@@ -18,10 +18,10 @@ def inicio():
 # La ruta /formulario dentro de la app llevará al manejo de datos del panel de log-in
 @app.route('/formulario', methods=['POST'])
 def procesar():
-    dni = request.form['DNI']
+    user_name = request.form['user_name']
     password = request.form['password']
     
-    mensaje_estado = inicio_sesion.login_usuario(dni, password)
+    mensaje_estado = inicio_sesion.login_usuario(user_name, password)
     return render_template('login.html', msg=mensaje_estado[0], msg_class=mensaje_estado[1])
 
 # La ruta /sing-up te lleva a la pagina de sing-up
@@ -33,7 +33,7 @@ def sing_up():
 # La ruta /form-singup maneja los datos del formulario de registro
 @app.route('/form-singup', methods=['POST'])
 def form_singup():
-    dni = request.form['DNI']
+    user_name = request.form['user_name']
     name = request.form['name']
     surname = request.form['surname']
     email = request.form['email']
@@ -42,7 +42,7 @@ def form_singup():
     password2 = request.form['password2']
 
     # La validación de datos se lleva a cabo en el fichero registro.py
-    mensaje_estado = registro.registrar_usuario(dni, name, surname, email, phone, password, password2)
+    mensaje_estado = registro.registrar_usuario(user_name, name, surname, email, phone, password, password2)
     return render_template('singup.html', msg=mensaje_estado[0], msg_class=mensaje_estado[1])
 
 # La ruta segundo factor, al ser invocada redirige a la pagina segundo_factor.html

@@ -1,6 +1,5 @@
 CREATE TABLE usuarios(
     user_name VARCHAR(255) PRIMARY KEY NOT NULL,
-    dni BLOB NOT NULL,
     nombre BLOB NOT NULL,
     apellidos BLOB NOT NULL,
     email BLOB NOT NULL,

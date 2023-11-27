@@ -20,7 +20,7 @@ def login_usuario(user_name, password):
     error = True
 
     # Consultamos los datos relevantes para el log-in en la base de datos
-    consulta = "SELECT user_name, salt, encryped_pass, email FROM usuarios WHERE user_name = %s"
+    consulta = "SELECT user_name, salt, encryped_pass, email, permiso FROM usuarios WHERE user_name = %s"
     values = (user_name,)
     conexion_db.cursor.execute(consulta, values)
     # Guardamos los resultados de la consulta en una lista de tuplas (solo una tupla en este caso -> 1 coincidencia)
@@ -31,6 +31,7 @@ def login_usuario(user_name, password):
         respuesta = 'El usuario no tiene una cuenta activa en BioLab'
     # Si el usuario está registrado pasamos a comprobar si las contraseñas coinciden.
     else:
+        permiso = resultados[0][4]
         # Recuperamos el salt para añadirselo a la contraseña introducida por el usuario
         salt = resultados[0][1]
         # Recuperamos la contraseña correcta del usuario para comprobarla con la introducida
@@ -43,14 +44,15 @@ def login_usuario(user_name, password):
             metodo.verify(password, real_pass)
             respuesta = f"La contraseña es correcta, bienvenido {user_name}"
             error = False
-            codigo_verificacion = correo_2FA.mandar_correo(desencriptar_dato(resultados[0][3]))
-            return [respuesta, "acceso"]
+            if permiso != "A":
+                codigo_verificacion = correo_2FA.mandar_correo(desencriptar_dato(resultados[0][3]))
+            return [respuesta, "acceso", permiso]
         except:
             # Si ambas contraseñas no coinciden entonces saltará una excepción de cryptography
             respuesta = f"La contraseña es incorrecta"
     # Devolvemos un mensaje en la pagina de log-in, este varía dependiendo de si la contraseña es correcta o no
     if error == True:    
-        return [respuesta, "error"]
+        return [respuesta, "error", None]
 
 # Creamos la funcion que comprueba si el codigo de verificacion mandado por correo es correcto
 def comprobar_codigo_verificación(codigo_introducido):

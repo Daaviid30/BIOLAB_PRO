@@ -3,14 +3,21 @@ Autores: David Martín (100472099) / Iván Llorente (100472242)"""
 
 #Importamos las librerias necesarias para la ejecución de la app
 import inicio_sesion
+import os
 import registro
 import papers
 import solicitud
+import reconocimiento_facial
 from flask import Flask, request, render_template
 
 # Creamos la aplicación Flask
 app = Flask(__name__)
 
+# Obtén la ruta al directorio actual del script
+script_dir = os.path.dirname(__file__)
+
+# Construye la ruta completa al archivo 'codificaciones.json'
+codificaciones_path = os.path.join(script_dir, 'static', 'json', 'codificaciones.json')
 # La ruta de inicio de la app será la pagina de log-in
 @app.route('/')
 def inicio():
@@ -23,6 +30,14 @@ def procesar():
     password = request.form['password']
     
     mensaje_estado = inicio_sesion.login_usuario(user_name, password)
+    if mensaje_estado[2] == "A":
+        estado = reconocimiento_facial.reconocer_cara(codificaciones_path)
+        if estado == "reconocido":
+            mensaje_estado[0] = "Reconocimiento exitoso"
+            return render_template('administrador.html', msg=mensaje_estado[0], msg_class=mensaje_estado[1])
+        else:
+            mensaje_estado[0] = "Reconocimiento erroneo" 
+            mensaje_estado[1] = "error"   
     return render_template('login.html', msg=mensaje_estado[0], msg_class=mensaje_estado[1])
 
 # La ruta /sing-up te lleva a la pagina de sing-up

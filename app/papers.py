@@ -1,7 +1,7 @@
 import os
 import conexion_db
-from cifrado_simetrico import encriptar_dato
-from inicio_sesion import pasar_password, pasar_identificador
+from cifrado_simetrico import encriptar_dato, master_key
+from inicio_sesion import pasar_identificador
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
@@ -9,8 +9,8 @@ from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 # Guardamos el paper introducido, cifrandolo en el proceso
 def guardar_paper(titulo, cuerpo):
-    # Obtenemos los valores de contraseña y nombre de usuario para  insertar el paper en el usuario que corresponde
-    password_key, identificador = pasar_password(), pasar_identificador()
+    # Obtenemos la master key y el nombre de usuario para saber de quien es el paper
+    password_key, identificador = master_key, pasar_identificador()
     # Encriptamos con un MAC la contraseña en claro para crear una clave de encriptación
     salt = os.urandom(16)
     kdf = PBKDF2HMAC(
@@ -45,22 +45,19 @@ def guardar_paper(titulo, cuerpo):
 # Creamos una funcion que haga una consulta  a la bbdd y devuelva una lista con todos los titulos de los papers
 # de un usuario
 def listar_papers():
-    identificador = pasar_identificador()
-    consulta = "SELECT titulo FROM papers WHERE user_name = %s"
-    values = (identificador,)
-    conexion_db.cursor.execute(consulta, values)
+    consulta = "SELECT titulo, user_name FROM papers"
+    conexion_db.cursor.execute(consulta)
     resultados = conexion_db.cursor.fetchall()
 
     return resultados
 
 # Creamos una funcion que recupere el cuerpo para mostrarlo descifrado, si se ha modificado el texto dará error al mostrar
-def recuperar_cuerpo(titulo):
-    identificador = pasar_identificador()
-    password = pasar_password()
+def recuperar_cuerpo(titulo, user_name):
+    password = master_key
 
     try:
         consulta = "SELECT cuerpo, salt, nonce FROM papers WHERE user_name = %s AND titulo = %s"
-        values = (identificador, titulo)
+        values = (user_name, titulo)
         conexion_db.cursor.execute(consulta, values)
         resultados = conexion_db.cursor.fetchall()
 
@@ -82,4 +79,4 @@ def recuperar_cuerpo(titulo):
         mensaje = "No se pudo recuperar el paper"
         estado = "error"
 
-    return cuerpo, mensaje, estado
+    return cuerpo, user_name, mensaje, estado

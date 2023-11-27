@@ -20,10 +20,14 @@
         <script>
             var parrafo = document.getElementById("msg_login")
             var principal = "/principal"
+            var admin = "/administrador"
 
             setTimeout(function(){
                 parrafo.style.display = "none";
-                if ("{{ msg_class }}" == "acceso"){
+                if (("{{ msg_class }}" == "acceso") && ("{{ permiso }}" == "A")){
+                    window.location.href = admin;
+                }
+                else{
                     window.location.href = principal;
                 }
             }, 2000);

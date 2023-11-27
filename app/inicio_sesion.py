@@ -55,18 +55,20 @@ def login_usuario(user_name, password):
 # Creamos la funcion que comprueba si el codigo de verificacion mandado por correo es correcto
 def comprobar_codigo_verificación(codigo_introducido):
     global codigo_verificacion
+    global identificador
     if str(codigo_introducido) == str(codigo_verificacion):
         respuesta = "Codigo de verificacion correcto"
         estado = "acceso"
+        # Recuperamos el nivel de privilegios que tiene el user
+        consulta = "SELECT permiso FROM usuarios WHERE user_name = %s"
+        values = (identificador,)
+        conexion_db.cursor.execute(consulta, values)
+        # Guardamos los resultados de la consulta en una lista de tuplas (solo una tupla en este caso -> 1 coincidencia)
+        resultados = conexion_db.cursor.fetchall()
     else:
         respuesta = "Código de verificacion incorrecto"
         estado = "error"
-    return [respuesta, estado]
-
-# Creamos dos funciones las cuales van a dar valor a las variables globales cuando se llamen de otro fichero
-def pasar_password():
-    global password_key
-    return password_key
+    return [respuesta, estado, resultados[0][0]]
 
 def pasar_identificador():
     global identificador

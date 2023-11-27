@@ -6,7 +6,8 @@ CREATE TABLE usuarios(
     telefono BLOB NOT NULL,
     salt BLOB NOT NULL,
     encryped_pass BLOB NOT NULL,
-    permiso CHAR(1) NOT NULL
+    permiso CHAR(1) NOT NULL,
+    public_key BLOB
 );
 
 

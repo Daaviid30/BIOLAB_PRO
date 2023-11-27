@@ -57,7 +57,7 @@ def form_2fa():
 
     # Los datos los maneja el fichero inicio_sesion.py
     mensaje_estado = inicio_sesion.comprobar_codigo_verificación(codigo_verificacion)
-    return render_template('segundo_factor.html', msg=mensaje_estado[0], msg_class=mensaje_estado[1])
+    return render_template('segundo_factor.html', msg=mensaje_estado[0], msg_class=mensaje_estado[1], permiso=mensaje_estado[2])
 
 # Creamos la ruta principal que te redirigira a la pagina principal.html
 @app.route('/principal')
@@ -82,14 +82,24 @@ def form_principal():
 # Esta ruta muestra el paper seleccionado
 @app.route('/paper', methods=['POST'])
 def paper():
-    titulo  = request.form['titulo']
-    cuerpo, mensaje, estado = papers.recuperar_cuerpo(titulo)
+    titulo_username = request.form['titulo']
+    # Dividir la cadena utilizando el separador "-"
+    partes = titulo_username.split('-')
+    # Eliminar espacios adicionales alrededor del título y el nombre de usuario
+    titulo = partes[0].strip()
+    user_name = partes[1].strip()
+
+    cuerpo, user_name, mensaje, estado = papers.recuperar_cuerpo(titulo, user_name)
     # Si no existe cuerpo en el paper, significa que no se pudo recuperar dicho paper, por lo que aparecera un 
     # mensaje de error
     if not cuerpo:
         titulos = papers.listar_papers()
         return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
-    return render_template('paper.html', titulo=titulo, cuerpo=cuerpo, msg=mensaje, msg_class=estado)
+    return render_template('paper.html', titulo=titulo, cuerpo=cuerpo, user=user_name, msg=mensaje, msg_class=estado)
+
+@app.route('/administrador')
+def administrador():
+    return render_template('administrador.html')
 
 # Ejecución del programa
 if __name__ == '__main__':

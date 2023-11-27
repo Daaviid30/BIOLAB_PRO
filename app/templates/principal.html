@@ -39,7 +39,7 @@
             {% if titulos %}
                 {% for item in titulos %}
                     <form method="POST" action="/paper">
-                        <input type="submit" class="titulos-papers" name="titulo" value="{{ item[0] }}">
+                        <input type="submit" class="titulos-papers" name="titulo" value="{{ item[0] }} - {{ item[1]}}">
                     </form>
                 {% endfor %}
             {% endif %}

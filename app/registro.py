@@ -10,7 +10,7 @@ def registrar_usuario(user_name, name, surname, email, phone, password, password
     error = True
 
     # Realizamos varias comprobaciones para que la inserccion de datos en la bbdd sea correcta
-    if not (5 < len(user_name) < 40):
+    if not (5 <= len(user_name) <= 40):
         respuesta = 'El nombre de usuario debe tener entre 5 y 40 caracteres'
     
     elif len(name) > 30:

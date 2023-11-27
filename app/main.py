@@ -5,6 +5,7 @@ Autores: David Martín (100472099) / Iván Llorente (100472242)"""
 import inicio_sesion
 import registro
 import papers
+import solicitud
 from flask import Flask, request, render_template
 
 # Creamos la aplicación Flask
@@ -79,6 +80,12 @@ def form_principal():
     # Al introducir nuevos papers se redirige a la misma pagina pero con la lista de titulos actualizada
     return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
 
+@app.route('/form-solicitud', methods=['POST'])
+def form_solicitud():
+    titulos = papers.listar_papers()
+    mensaje, estado = solicitud.anadir_solicitud()
+    return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
+
 # Esta ruta muestra el paper seleccionado
 @app.route('/paper', methods=['POST'])
 def paper():
@@ -89,17 +96,32 @@ def paper():
     titulo = partes[0].strip()
     user_name = partes[1].strip()
 
-    cuerpo, user_name, mensaje, estado = papers.recuperar_cuerpo(titulo, user_name)
+    cuerpo, user_name, mensaje, estado, permiso = papers.recuperar_cuerpo(titulo, user_name)
     # Si no existe cuerpo en el paper, significa que no se pudo recuperar dicho paper, por lo que aparecera un 
     # mensaje de error
     if not cuerpo:
         titulos = papers.listar_papers()
-        return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
+        if permiso != 'A':
+            return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
+        else:
+            return render_template('principal-admin.html', msg=mensaje, msg_class=estado, titulos=titulos)
     return render_template('paper.html', titulo=titulo, cuerpo=cuerpo, user=user_name, msg=mensaje, msg_class=estado)
 
 @app.route('/administrador')
 def administrador():
     return render_template('administrador.html')
+
+@app.route('/solicitudes', methods=['POST'])
+def solicitudes():
+    solicitudes = solicitud.recuperar()
+
+    return render_template('solicitudes.html', solicitudes=solicitudes)
+
+@app.route('/principal-admin', methods=['POST'])
+def principal_admin():
+    titulos = papers.listar_papers()
+    return render_template('principal-admin.html', solicitudes=solicitudes, titulos=titulos)
+
 
 # Ejecución del programa
 if __name__ == '__main__':

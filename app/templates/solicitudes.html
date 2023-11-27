@@ -3,18 +3,20 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=0.8">
         
-        <title>Biolab-Admin</title>
+        <title>Biolab-Solicitudes</title>
 
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/biologia.png') }}">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <form method="POST" action="/solicitudes">
-            <input type="submit" class="titulos-papers" name="solicitud" value="Ver solicitudes">
-        </form>
-        <form method="POST" action="/principal-admin">
-            <input type="submit" class="titulos-papers" name="principal" value="Ir a papers">
-        </form>
+        <div id="papers">
+            <h1 class="verde-claro">Peticiones de usuarios</h1>
+            {% if solicitudes %}
+                {% for item in solicitudes %}
+                    <p class="titulos-papers">{{ item[0] }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
     </body>
 </html>

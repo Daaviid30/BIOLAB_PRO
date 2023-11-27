@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <title>Biolab-Principal</title>
+        <title>Biolab-Principal-Admin</title>
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/biologia.png') }}">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -31,9 +31,6 @@
                 <textarea placeholder="Titulo" autofocus required name="titulo" class="campo" maxlength="70" cols="70" rows="1"></textarea><br>
                 <textarea name="cuerpo" class="campo" cols="70" rows="7" maxlength="10000" placeholder="Cuerpo del mensaje" required></textarea><br>
                 <input type="submit" class="campo" id="enviar">
-            </form>
-            <form class="login" id="form-solicitud" action="/form-solicitud" method="post">
-                <input type="submit" class="campo" id="solicitud" value="Solicitar permisos de doctor">
             </form>
         </div>
 

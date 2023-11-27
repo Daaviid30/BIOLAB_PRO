@@ -46,6 +46,7 @@ body{
 }
 
 .panel-principal{
+    position: relative;
     background-color: rgb(0, 43, 26);
     max-width: 25%;
     height: auto;
@@ -82,6 +83,22 @@ body{
 }
 
 #enviar:hover{
+    background-color:  rgb(59, 122, 76);
+    border-color: rgb(157, 255, 183);
+    color: white;
+}
+
+#form-solicitud{
+    position: absolute;
+    left: 58.8%;
+    bottom : 5%;
+}
+
+#solicitud{
+    background-color: rgb(237, 241, 107);
+}
+
+#solicitud:hover{
     background-color:  rgb(59, 122, 76);
     border-color: rgb(157, 255, 183);
     color: white;

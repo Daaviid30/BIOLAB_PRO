@@ -20,3 +20,8 @@ CREATE TABLE papers(
     PRIMARY KEY (user_name, titulo),
     FOREIGN KEY (user_name) REFERENCES usuarios(user_name)
 );
+
+CREATE TABLE solicitudes(
+    user_name VARCHAR(255) PRIMARY KEY NOT NULL,
+    FOREIGN KEY (user_name) REFERENCES usuarios(user_name)
+);

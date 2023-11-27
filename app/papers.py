@@ -12,6 +12,15 @@ def guardar_paper(titulo, cuerpo):
     # Obtenemos la master key y el nombre de usuario para saber de quien es el paper
     password_key, identificador = master_key, pasar_identificador()
     # Encriptamos con un MAC la contraseña en claro para crear una clave de encriptación
+    consulta = "SELECT permiso FROM usuarios WHERE user_name = %s"
+    values = (identificador,)
+    conexion_db.cursor.execute(consulta, values)
+    permiso = conexion_db.cursor.fetchall()
+
+    if permiso[0][0] == 'U':
+        mensaje = "No tienes permiso para crear papers"
+        return mensaje, "error"
+
     salt = os.urandom(16)
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
@@ -54,6 +63,11 @@ def listar_papers():
 # Creamos una funcion que recupere el cuerpo para mostrarlo descifrado, si se ha modificado el texto dará error al mostrar
 def recuperar_cuerpo(titulo, user_name):
     password = master_key
+    consulta = "SELECT permiso FROM usuarios WHERE user_name = %s"
+    values = (user_name,)
+    conexion_db.cursor.execute(consulta, values)
+    permiso = conexion_db.cursor.fetchall()
+    permiso = permiso[0][0]
 
     try:
         consulta = "SELECT cuerpo, salt, nonce FROM papers WHERE user_name = %s AND titulo = %s"
@@ -79,4 +93,4 @@ def recuperar_cuerpo(titulo, user_name):
         mensaje = "No se pudo recuperar el paper"
         estado = "error"
 
-    return cuerpo, user_name, mensaje, estado
+    return cuerpo, user_name, mensaje, estado, permiso

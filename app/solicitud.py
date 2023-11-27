@@ -61,3 +61,23 @@ def anadir_solicitud():
         estado = "acceso"
     
     return mensaje, estado
+
+def aceptar_solicitud(user_name):
+    # Cambiamos el permiso del usuario a doctor
+    consulta = "UPDATE usuarios SET permiso = 'D' WHERE user_name = %s"
+    values = (user_name,)
+    conexion_db.cursor.execute(consulta, values)
+    conexion_db.conexion.commit()
+
+    # Eliminamos la solicitud de la base de datos
+    consulta = "DELETE FROM solicitudes WHERE user_name = %s"
+    values = (user_name,)
+    conexion_db.cursor.execute(consulta, values)
+    conexion_db.conexion.commit()
+    
+def denegar_solicitud(user_name):
+    # Eliminamos la solicitud de la base de datos
+    consulta = "UPDATE solicitudes SET rechazada = 1 WHERE user_name = %s"
+    values = (user_name,)
+    conexion_db.cursor.execute(consulta, values)
+    conexion_db.conexion.commit()

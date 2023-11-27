@@ -75,10 +75,15 @@ def form_principal():
     cuerpo = request.form['cuerpo']
 
     # El procesamiento de los datos introducidos es dado por el fichero papers.py
-    mensaje, estado = papers.guardar_paper(titulo, cuerpo)
+    mensaje, estado, permiso = papers.guardar_paper(titulo, cuerpo)
     titulos = papers.listar_papers()
+
     # Al introducir nuevos papers se redirige a la misma pagina pero con la lista de titulos actualizada
-    return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
+    if permiso != 'A':
+        return render_template('principal.html', msg=mensaje, msg_class=estado, titulos=titulos)
+    else:
+        return render_template('principal-admin.html', msg=mensaje, msg_class=estado, titulos=titulos)
+    
 
 @app.route('/form-solicitud', methods=['POST'])
 def form_solicitud():
@@ -111,10 +116,30 @@ def paper():
 def administrador():
     return render_template('administrador.html')
 
+@app.route('/volver-administrador', methods=['POST'])
+def volver_administrador():
+    return render_template('administrador.html')
+
 @app.route('/solicitudes', methods=['POST'])
 def solicitudes():
-    solicitudes = solicitud.recuperar_solicitudes()
 
+    solicitudes = solicitud.recuperar_solicitudes()
+    return render_template('solicitudes.html', solicitudes=solicitudes)
+
+@app.route('/aceptar-solicitud', methods=['POST'])
+def aceptar_solicitud():
+    user_name = request.form['user_name']
+    solicitud.aceptar_solicitud(user_name)
+
+    solicitudes = solicitud.recuperar_solicitudes()
+    return render_template('solicitudes.html', solicitudes=solicitudes)
+
+@app.route('/denegar-solicitud', methods=['POST'])
+def denegar_solicitud():
+    user_name = request.form['user_name']
+    solicitud.denegar_solicitud(user_name)
+
+    solicitudes = solicitud.recuperar_solicitudes()
     return render_template('solicitudes.html', solicitudes=solicitudes)
 
 @app.route('/principal-admin', methods=['POST'])

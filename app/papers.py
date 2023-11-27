@@ -19,7 +19,7 @@ def guardar_paper(titulo, cuerpo):
 
     if permiso[0][0] == 'U':
         mensaje = "No tienes permiso para crear papers"
-        return mensaje, "error"
+        return mensaje, "error", permiso[0][0]
 
     salt = os.urandom(16)
     kdf = PBKDF2HMAC(
@@ -45,11 +45,11 @@ def guardar_paper(titulo, cuerpo):
         conexion_db.cursor.execute(insertar_datos, values)
         conexion_db.conexion.commit()
         mensaje = "El paper ha sido almacenado correctamente"
-        return mensaje, "acceso"
+        return mensaje, "acceso", permiso[0][0]
 
     except:
         mensaje = "No se pudo guardar el paper"
-        return mensaje, "error"
+        return mensaje, "error", permiso[0][0]
 
 # Creamos una funcion que haga una consulta  a la bbdd y devuelva una lista con todos los titulos de los papers
 # de un usuario

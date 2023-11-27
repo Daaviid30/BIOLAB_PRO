@@ -18,15 +18,22 @@
                     <p class="titulos-papers">{{ item[0] }} || {{ item[1] }}</p>
                     <div class="botones-container">
                         <form action="/aceptar-solicitud" method="post">
-                            <img src="{{ url_for('static', filename='images/aceptar.png') }}" alt="aceptar">
+                            <input type="hidden" name="user_name" value="{{ item[0] }}">
+                            <input type="image" src="{{ url_for('static', filename='images/aceptar.png') }}" alt="aceptar" name="user_name" value="{{ item[0] }}">
                         </form>
-                        <form action="/rechazar-solicitud" method="post">
-                            <img src="{{ url_for('static', filename='images/rechazar.png') }}" alt="rechazar">
+                        <form action="/denegar-solicitud" method="post">
+                            <input type="hidden" name="user_name" value="{{ item[0] }}">
+                            <input type="image" src="{{ url_for('static', filename='images/rechazar.png') }}" alt="rechazar" name="user_name" value="{{ item[0] }}">
                         </form>
                     </div>
                 </div>
                 {% endfor %}
             {% endif %}
+        </div>
+        <div class="panel-principal">
+            <form action="/volver-administrador" method="post">
+                <input type="submit" class="opcion-admin" value="Volver" id="volver-admin">
+            </form>
         </div>
     </body>
 </html>

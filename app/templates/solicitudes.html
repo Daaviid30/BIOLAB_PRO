@@ -14,7 +14,17 @@
             <h1 class="verde-claro">Peticiones de usuarios</h1>
             {% if solicitudes %}
                 {% for item in solicitudes %}
+                <div class="solicitud-item">
                     <p class="titulos-papers">{{ item[0] }} || {{ item[1] }}</p>
+                    <div class="botones-container">
+                        <form action="/aceptar-solicitud" method="post">
+                            <img src="{{ url_for('static', filename='images/aceptar.png') }}" alt="aceptar">
+                        </form>
+                        <form action="/rechazar-solicitud" method="post">
+                            <img src="{{ url_for('static', filename='images/rechazar.png') }}" alt="rechazar">
+                        </form>
+                    </div>
+                </div>
                 {% endfor %}
             {% endif %}
         </div>

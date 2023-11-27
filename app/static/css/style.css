@@ -225,8 +225,29 @@ body{
     margin: 0% auto 5% auto;
 }
 
-#listado-solicitudes p{
+.solicitud-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 1.2em;
     width: 50%;
     margin: 0.5% auto;
+}
+
+.botones-container{
+    display: flex;
+}
+
+/* Añade estilos específicos para las imágenes dentro de los botones */
+.botones-container img {
+    width: 25px; /* Ajusta el tamaño según sea necesario */
+    height: 25px; /* Ajusta el tamaño según sea necesario */
+    cursor: pointer;
+    border: none;
+    margin: 5px 5px 0 5px;
+    object-fit: contain; /* Mantiene la relación de aspecto y ajusta la imagen dentro del contenedor */
+}
+
+.botones-container img:hover, .boton-rechazar img:hover {
+    filter: brightness(0.8);
 }

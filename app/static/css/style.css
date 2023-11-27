@@ -214,3 +214,19 @@ body{
     border-color: rgb(157, 255, 183);
     color: white;
 }
+
+#listado-solicitudes{
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0% auto 5% auto;
+}
+
+#listado-solicitudes p{
+    font-size: 1.2em;
+    width: 50%;
+    margin: 0.5% auto;
+}

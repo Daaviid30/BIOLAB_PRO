@@ -113,7 +113,7 @@ def administrador():
 
 @app.route('/solicitudes', methods=['POST'])
 def solicitudes():
-    solicitudes = solicitud.recuperar()
+    solicitudes = solicitud.recuperar_solicitudes()
 
     return render_template('solicitudes.html', solicitudes=solicitudes)
 

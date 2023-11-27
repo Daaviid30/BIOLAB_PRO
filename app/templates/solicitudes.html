@@ -10,11 +10,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <div id="papers">
+        <div id="listado-solicitudes">
             <h1 class="verde-claro">Peticiones de usuarios</h1>
             {% if solicitudes %}
                 {% for item in solicitudes %}
-                    <p class="titulos-papers">{{ item[0] }}</p>
+                    <p class="titulos-papers">{{ item[0] }} || {{ item[1] }}</p>
                 {% endfor %}
             {% endif %}
         </div>

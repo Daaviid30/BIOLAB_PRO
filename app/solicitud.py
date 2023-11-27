@@ -11,17 +11,20 @@ def recuperar():
 
 def anadir_solicitud():
     user_name = pasar_identificador()
-    consulta = "SELECT user_name FROM solicitudes WHERE user_name = %s"
+    consulta = "SELECT user_name, rechazada FROM solicitudes WHERE user_name = %s"
     values = (user_name,)
     conexion_db.cursor.execute(consulta, values)
     resultado = conexion_db.cursor.fetchall()
     
     if len(resultado) != 0:
-        mensaje = "Ya has solicitado permiso de doctor"
+        if resultado[0][1] == 1:
+            mensaje = "Su solicitud fue rechazada previamente. Contacte con un administrador"
+        else:    
+            mensaje = "Ya has solicitado permiso de doctor"
         estado = "error"
     else:
-        consulta = "INSERT INTO solicitudes (user_name) VALUES (%s)"
-        values = (user_name,)
+        consulta = "INSERT INTO solicitudes (user_name, rechazada) VALUES (%s, %s)"
+        values = (user_name, 0,)
         conexion_db.cursor.execute(consulta, values)
         conexion_db.conexion.commit()
         mensaje = "Se ha solicitado el permiso correctamente"

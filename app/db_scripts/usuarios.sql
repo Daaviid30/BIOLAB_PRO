@@ -23,5 +23,6 @@ CREATE TABLE papers(
 
 CREATE TABLE solicitudes(
     user_name VARCHAR(255) PRIMARY KEY NOT NULL,
+    rechazada TINYINT(1) NOT NULL,
     FOREIGN KEY (user_name) REFERENCES usuarios(user_name)
 );

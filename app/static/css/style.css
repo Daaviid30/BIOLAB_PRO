@@ -59,6 +59,7 @@ body{
     border-style: solid;
     flex-direction: column;
     margin: 14% auto;
+    text-align: center;
 }
 
 .panel-principal h1{
@@ -194,4 +195,22 @@ body{
     color: rgb(75, 182, 103);
     text-shadow: 1px 1px 1px rgb(157, 255, 183);
     text-align: center;
+}
+
+.opcion-admin {
+    text-decoration: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: rgb(122, 223, 149);
+    border: 2px solid rgb(59, 122, 76);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    margin: 15px;
+}
+
+.opcion-admin:hover {
+    background-color: rgb(59, 122, 76);
+    border-color: rgb(157, 255, 183);
+    color: white;
 }

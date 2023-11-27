@@ -10,11 +10,14 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <form method="POST" action="/solicitudes">
-            <input type="submit" class="titulos-papers" name="solicitud" value="Ver solicitudes">
-        </form>
-        <form method="POST" action="/principal-admin">
-            <input type="submit" class="titulos-papers" name="principal" value="Ir a papers">
-        </form>
+        <div class="panel-principal">
+            <h1>Seleccione entre las siguientes opciones</h1>
+            <form method="POST" action="/solicitudes">
+                <input type="submit" class="opcion-admin" name="solicitud" value="Ver solicitudes">
+            </form>
+            <form method="POST" action="/principal-admin">
+                <input type="submit" class="opcion-admin" name="principal" value="Ir a papers">
+            </form>
+        </div>
     </body>
 </html>

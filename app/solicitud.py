@@ -32,7 +32,7 @@ def anadir_solicitud():
         if resultado[0][1] == 1:
             mensaje = "Su solicitud fue rechazada previamente. Contacte con un administrador"
         else:    
-            mensaje = "Ya has solicitado permiso de doctor"
+            mensaje = "Ya has solicitado permisos de doctor"
         estado = "error"
     # Si no ha solicitado permiso, se añade a la base de datos    
     else:

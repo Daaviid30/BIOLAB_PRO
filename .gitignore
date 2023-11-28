@@ -3,6 +3,6 @@ venv/
 app/__pycache__/
 app/static/pem/
 app/static/json/
-A/
-AC1/
-AC2/
+app/static/private_keys/
+app/static/solicitudes_certificado/
+app/static/certificados/

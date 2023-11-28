@@ -20,8 +20,8 @@ script_dir = os.path.dirname(__file__)
 # Construye la ruta completa al archivo 'codificaciones.json'
 codificaciones_path = os.path.join(script_dir, 'static', 'json', 'codificaciones.json')
 
-# Construye la ruta completa al directorio 'pem'
-pems_path = os.path.join(script_dir, 'static', 'pem')
+# Construye la ruta completa al directorio 'static'
+static_path = os.path.join(script_dir, 'static')
 
 # La ruta de inicio de la app será la pagina de log-in
 @app.route('/')
@@ -95,7 +95,7 @@ def form_principal():
     cuerpo = request.form['cuerpo']
 
     # El procesamiento de los datos introducidos es dado por el fichero papers.py
-    mensaje, estado, permiso = papers.guardar_paper(titulo, cuerpo, pems_path)
+    mensaje, estado, permiso = papers.guardar_paper(titulo, cuerpo, static_path)
     titulos = papers.listar_papers()
 
     # Al introducir nuevos papers se redirige a la misma pagina pero con la lista de titulos actualizada
@@ -151,7 +151,7 @@ def aceptar_solicitud():
     user_name = request.form['user_name']
     solicitud.aceptar_solicitud(user_name)
     # Como el usuario ha sido aceptado y se le han dado permisos de doctor, es necesario generar sus claves
-    firma_digital.generar_claves(pems_path, user_name)
+    firma_digital.generar_claves(static_path, user_name)
 
     solicitudes = solicitud.recuperar_solicitudes()
     return render_template('solicitudes.html', solicitudes=solicitudes)

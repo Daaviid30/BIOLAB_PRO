@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 
 # Guardamos el paper introducido, cifrandolo en el proceso
-def guardar_paper(titulo, cuerpo, pems_path):
+def guardar_paper(titulo, cuerpo, static_path):
 
     # Obtenemos la master key y el nombre de usuario para saber de quien es el paper y que permisos tiene
     password_key, identificador = master_key, pasar_identificador()
@@ -26,7 +26,7 @@ def guardar_paper(titulo, cuerpo, pems_path):
     # Para registrar un paper es necesario llevar a cabo una firma digital que demuestre tu identidad
     # (Los admin no necesitan pasar esta validación)
     if permiso[0][0] == 'D':
-        mensaje, estado = firma_digital(pems_path=pems_path, user_name=identificador)
+        mensaje, estado = firma_digital(static_path=static_path, user_name=identificador)
         if estado == "error":
             return mensaje, estado, permiso[0][0]
 

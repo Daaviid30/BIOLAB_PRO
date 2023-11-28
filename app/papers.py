@@ -1,5 +1,6 @@
 import os
 import conexion_db
+from firma_digital import firma_digital
 from cifrado_simetrico import encriptar_dato, master_key
 from inicio_sesion import pasar_identificador
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -8,18 +9,26 @@ from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 
 # Guardamos el paper introducido, cifrandolo en el proceso
-def guardar_paper(titulo, cuerpo):
-    # Obtenemos la master key y el nombre de usuario para saber de quien es el paper
+def guardar_paper(titulo, cuerpo, pems_path):
+
+    # Obtenemos la master key y el nombre de usuario para saber de quien es el paper y que permisos tiene
     password_key, identificador = master_key, pasar_identificador()
-    # Encriptamos con un MAC la contraseña en claro para crear una clave de encriptación
     consulta = "SELECT permiso FROM usuarios WHERE user_name = %s"
     values = (identificador,)
     conexion_db.cursor.execute(consulta, values)
     permiso = conexion_db.cursor.fetchall()
 
+    # Si el usuario no es doctor o administrador no puede crear papers
     if permiso[0][0] == 'U':
         mensaje = "No tienes permiso para crear papers"
         return mensaje, "error", permiso[0][0]
+    
+    # Para registrar un paper es necesario llevar a cabo una firma digital que demuestre tu identidad
+    # (Los admin no necesitan pasar esta validación)
+    if permiso[0][0] == 'D':
+        mensaje, estado = firma_digital(pems_path=pems_path, user_name=identificador)
+        if estado == "error":
+            return mensaje, estado, permiso[0][0]
 
     salt = os.urandom(16)
     kdf = PBKDF2HMAC(
@@ -44,7 +53,10 @@ def guardar_paper(titulo, cuerpo):
         values = (identificador, titulo, encrypted_data, salt, nonce)
         conexion_db.cursor.execute(insertar_datos, values)
         conexion_db.conexion.commit()
-        mensaje = "El paper ha sido almacenado correctamente"
+        if permiso[0][0] == 'A':
+            mensaje = "El paper ha sido almacenado correctamente"
+        else:
+            mensaje = "Firma digital verificada. El paper ha sido almacenado correctamente"
         return mensaje, "acceso", permiso[0][0]
 
     except:
